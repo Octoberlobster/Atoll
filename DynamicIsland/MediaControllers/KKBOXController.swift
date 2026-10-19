@@ -12,7 +12,7 @@ import Foundation
 
 /// KKBOX playback through macOS Media Remote.
 final class KKBOXController: FilteredNowPlayingController {
-    static let bundleIdentifier = "com.kkbox.KKBOX"
+    static let bundleIdentifier = "com.kkbox.electron-app"
 
     init?() {
         super.init(

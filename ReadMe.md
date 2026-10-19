@@ -74,6 +74,84 @@ Atoll turns the MacBook notch into a focused command surface for media, system i
 2) Open the DMG and drag Atoll into Applications.
 3) Launch Atoll and grant the requested permissions.
 
+## Build Locally
+
+You can build and run Atoll locally without an Apple Developer Program membership. Local builds are unsigned, so macOS may require you to approve the app the first time it launches.
+
+### Requirements
+
+- macOS 14.0 or later.
+- A MacBook with a notch.
+- Xcode 15 or later.
+- The Metal Toolchain installed in Xcode. In Xcode, open **Xcode → Settings → Components** and install it if Xcode reports that it is missing.
+
+### Build and Run
+
+Clone the repository and open a terminal in the project directory:
+
+```bash
+git clone https://github.com/Ebullioscopic/Atoll.git
+cd Atoll
+```
+
+Select the full Xcode installation, then resolve the Swift Package dependencies:
+
+```bash
+sudo xcode-select --switch /Applications/Xcode.app/Contents/Developer
+xcodebuild \
+  -resolvePackageDependencies \
+  -project DynamicIsland.xcodeproj \
+  -scheme DynamicIsland
+```
+
+Build an unsigned Release app:
+
+```bash
+rm -rf build/DerivedData
+
+xcodebuild \
+  -project DynamicIsland.xcodeproj \
+  -scheme DynamicIsland \
+  -configuration Release \
+  -derivedDataPath build/DerivedData \
+  CODE_SIGN_IDENTITY="-" \
+  CODE_SIGNING_REQUIRED=NO \
+  CODE_SIGNING_ALLOWED=NO \
+  build
+```
+
+The app is created at `build/DerivedData/Build/Products/Release/Atoll.app`. Run it with:
+
+```bash
+open "build/DerivedData/Build/Products/Release/Atoll.app"
+```
+
+If macOS blocks the unsigned app, remove the quarantine attribute only after verifying that you built the app from source:
+
+```bash
+xattr -dr com.apple.quarantine \
+  "build/DerivedData/Build/Products/Release/Atoll.app"
+open "build/DerivedData/Build/Products/Release/Atoll.app"
+```
+
+You can also open `DynamicIsland.xcodeproj` in Xcode, select the `DynamicIsland` scheme and `My Mac` destination, then press **Command-R**.
+
+### Install the Local Build
+
+To replace an existing local installation:
+
+```bash
+killall Atoll 2>/dev/null || true
+sudo rm -rf "/Applications/Atoll.app"
+sudo cp -R \
+  "build/DerivedData/Build/Products/Release/Atoll.app" \
+  "/Applications/Atoll.app"
+sudo xattr -dr com.apple.quarantine "/Applications/Atoll.app"
+open -a Atoll
+```
+
+Unsigned local builds are intended for personal use. A Developer ID certificate and Apple notarization are required for distributing an app that installs without Gatekeeper warnings on other Macs.
+
 ## Quick Start
 - Hover near the notch to expand; click to enter controls.
 - Use tabs for Media, Stats, Timers, Clipboard, and more.
