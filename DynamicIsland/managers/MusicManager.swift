@@ -844,6 +844,8 @@ class MusicManager: ObservableObject {
             newController = AppleMusicController()
         case .spotify:
             newController = SpotifyController()
+        case .kkbox:
+            newController = KKBOXController()
         case .youtubeMusic:
             newController = YouTubeMusicController()
         case .amazonMusic:
@@ -2267,6 +2269,8 @@ extension MusicManager {
             return appleMusicPink
         case .spotify:
             return spotifyGreen
+        case .kkbox:
+            return .accentColor
         case .amazonMusic:
             return amazonOrange
         case .tidal, .cider:
@@ -2288,6 +2292,8 @@ extension MusicManager {
             return appleMusicPink
         case "com.spotify.client":
             return spotifyGreen
+        case KKBOXController.bundleIdentifier:
+            return .accentColor
         case AmazonMusicController.bundleIdentifier:
             return amazonOrange
         case TidalController.bundleIdentifier:

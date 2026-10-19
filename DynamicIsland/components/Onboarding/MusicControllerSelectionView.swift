@@ -139,6 +139,8 @@ extension MediaControllerType {
             return String(localized: "Works with most media apps, including browsers, to detect what's playing. Note: This may be removed in a future macOS version.")
         case .spotify:
             return String(localized: "Connects directly to the Spotify app.")
+        case .kkbox:
+            return String(localized: "Uses macOS Now Playing when the KKBOX app is the active media source. Playback controls follow the system Now Playing target.")
         case .appleMusic:
             return String(localized: "Connects directly to the Apple Music app.")
         case .youtubeMusic:

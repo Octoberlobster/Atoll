@@ -71,6 +71,10 @@ enum MediaSourceCapabilities {
             return .init(name: String(localized: "Spotify"),
                          favoriting: .full, shuffle: .full, repeatMode: .full,
                          note: String(localized: "Favouriting uses the Spotify account connected in settings; Spotify's own app offers no local way to do it."))
+        case .kkbox:
+            return .init(name: String(localized: "KKBOX"),
+                         favoriting: .none, shuffle: .full, repeatMode: .full,
+                         note: String(localized: "Uses macOS Now Playing when the KKBOX app is the active media source."))
         case .youtubeMusic:
             return .init(name: String(localized: "YouTube Music"),
                          favoriting: .full, shuffle: .full, repeatMode: .full,

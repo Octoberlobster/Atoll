@@ -451,6 +451,7 @@ enum MediaControllerType: String, CaseIterable, Identifiable, Defaults.Serializa
     case nowPlaying = "Now Playing"
     case appleMusic = "Apple Music"
     case spotify = "Spotify"
+    case kkbox = "KKBOX"
     case youtubeMusic = "Youtube Music"
     case amazonMusic = "Amazon Music"
     case tidal = "TIDAL"
@@ -463,6 +464,7 @@ enum MediaControllerType: String, CaseIterable, Identifiable, Defaults.Serializa
         case .nowPlaying: return String(localized: "Now Playing")
         case .appleMusic: return String(localized: "Apple Music")
         case .spotify: return String(localized: "Spotify")
+        case .kkbox: return String(localized: "KKBOX")
         case .youtubeMusic: return String(localized: "Youtube Music")
         case .amazonMusic: return String(localized: "Amazon Music")
         case .tidal: return String(localized: "TIDAL")

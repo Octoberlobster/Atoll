@@ -3117,6 +3117,8 @@ private extension MediaControllerType {
             return ["com.apple.Music"]
         case .spotify:
             return ["com.spotify.client"]
+        case .kkbox:
+            return [KKBOXController.bundleIdentifier]
         case .youtubeMusic:
             return ["com.github.th-ch.youtube-music"]
         case .amazonMusic:
@@ -3133,6 +3135,7 @@ private extension MediaControllerType {
         case .nowPlaying: return "waveform"
         case .appleMusic: return "music.note"
         case .spotify: return "dot.radiowaves.left.and.right"
+        case .kkbox: return "music.note"
         case .youtubeMusic: return "play.rectangle.fill"
         case .amazonMusic: return "music.note.list"
         case .tidal: return "waveform.path"
@@ -3145,6 +3148,7 @@ private extension MediaControllerType {
         case .nowPlaying: return .accentColor
         case .appleMusic: return .pink
         case .spotify: return .green
+        case .kkbox: return .accentColor
         case .youtubeMusic: return .red
         case .amazonMusic: return .cyan
         case .tidal: return .primary
