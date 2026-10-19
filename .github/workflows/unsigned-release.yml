@@ -1,0 +1,116 @@
+name: Unsigned Release
+
+on:
+  push:
+    branches:
+      - dev
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: unsigned-release-${{ github.ref_name }}
+  cancel-in-progress: false
+
+env:
+  PROJECT: DynamicIsland.xcodeproj
+  SCHEME: DynamicIsland
+  APP_NAME: Atoll
+
+jobs:
+  build-and-release:
+    name: Build and publish unsigned DMG
+    runs-on: macos-26
+    timeout-minutes: 60
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Select Xcode
+        uses: maxim-lobanov/setup-xcode@v1
+        with:
+          xcode-version: latest-stable
+
+      - name: Validate project configuration
+        run: |
+          python3 -m unittest tests.test_privacy_configuration
+          python3 -m unittest tests.test_timer_lifecycle
+
+      - name: Install Metal Toolchain
+        run: |
+          sudo xcodebuild -runFirstLaunch || true
+          if ! xcrun --sdk macosx metal --version >/dev/null 2>&1; then
+            sudo xcodebuild -downloadComponent MetalToolchain
+          fi
+          xcrun --sdk macosx metal --version
+
+      - name: Resolve Swift Package dependencies
+        run: |
+          xcodebuild \
+            -resolvePackageDependencies \
+            -project "$PROJECT" \
+            -scheme "$SCHEME"
+
+      - name: Build unsigned app
+        run: |
+          rm -rf build/DerivedData
+
+          xcodebuild \
+            -project "$PROJECT" \
+            -scheme "$SCHEME" \
+            -configuration Release \
+            -derivedDataPath build/DerivedData \
+            CODE_SIGN_IDENTITY="-" \
+            CODE_SIGNING_REQUIRED=NO \
+            CODE_SIGNING_ALLOWED=NO \
+            build
+
+          test -d "build/DerivedData/Build/Products/Release/${APP_NAME}.app"
+
+      - name: Create unsigned DMG
+        id: package
+        run: |
+          BASE_VERSION=$(tr -d '[:space:]' < VERSION)
+          VERSION="${BASE_VERSION}-unsigned.${GITHUB_RUN_NUMBER}"
+          DMG_NAME="${APP_NAME}-${VERSION}.dmg"
+
+          rm -rf build/dmg "build/${DMG_NAME}"
+          mkdir -p build/dmg
+          cp -R \
+            "build/DerivedData/Build/Products/Release/${APP_NAME}.app" \
+            build/dmg/
+          ln -s /Applications build/dmg/Applications
+
+          hdiutil create \
+            -volname "$APP_NAME" \
+            -srcfolder build/dmg \
+            -ov \
+            -format UDZO \
+            "build/${DMG_NAME}"
+
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+          echo "dmg_name=$DMG_NAME" >> "$GITHUB_OUTPUT"
+
+      - name: Upload DMG artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: Atoll-unsigned-${{ steps.package.outputs.version }}
+          path: build/${{ steps.package.outputs.dmg_name }}
+          if-no-files-found: error
+          retention-days: 30
+
+      - name: Publish GitHub prerelease
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          TAG="v${{ steps.package.outputs.version }}"
+          DMG_NAME="${{ steps.package.outputs.dmg_name }}"
+
+          gh release create "$TAG" \
+            --repo "$GITHUB_REPOSITORY" \
+            --title "${APP_NAME} ${{ steps.package.outputs.version }}" \
+            --notes "Unsigned build from commit ${GITHUB_SHA}. macOS may require manually approving the app on first launch." \
+            --prerelease \
+            "build/${DMG_NAME}"

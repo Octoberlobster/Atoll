@@ -152,6 +152,12 @@ open -a Atoll
 
 Unsigned local builds are intended for personal use. A Developer ID certificate and Apple notarization are required for distributing an app that installs without Gatekeeper warnings on other Macs.
 
+### Download an Automated Unsigned Build
+
+Every push to the `dev` branch runs the **Unsigned Release** GitHub Actions workflow. When it succeeds, open the repository's [Releases page](https://github.com/Ebullioscopic/Atoll/releases) and download the newest prerelease DMG. You can also run the workflow manually from the **Actions** tab.
+
+These builds do not require an Apple Developer Program membership, but macOS may show a Gatekeeper warning the first time the app is opened.
+
 ## Quick Start
 - Hover near the notch to expand; click to enter controls.
 - Use tabs for Media, Stats, Timers, Clipboard, and more.
