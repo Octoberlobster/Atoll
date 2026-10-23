@@ -26,6 +26,7 @@ struct LockScreenReminderWidget: View {
     private let primaryFont = Font.system(size: 19, weight: .semibold, design: .rounded)
     private let iconSize: CGFloat = 20
     private let chipWidth: CGFloat = 9
+    private let widgetWidth: CGFloat = 360
 
     var body: some View {
         HStack(alignment: .center, spacing: 8) {
@@ -41,6 +42,7 @@ struct LockScreenReminderWidget: View {
                 .font(primaryFont)
                 .foregroundStyle(primaryTextColor)
                 .lineLimit(1)
+                .truncationMode(.tail)
                 .minimumScaleFactor(0.85)
                 .allowsTightening(true)
                 .layoutPriority(1)
@@ -78,7 +80,7 @@ struct LockScreenReminderWidget: View {
         }
         .padding(.horizontal, 16)
         .padding(.vertical, 12)
-        .frame(minWidth: 240, idealWidth: 360, maxWidth: 520, alignment: .leading)
+        .frame(width: widgetWidth, alignment: .leading)
         .foregroundStyle(appearance.primary())
         .background(Color.clear)
         .shadow(color: appearance.contentShadow, radius: 8, x: 0, y: 3)
@@ -125,4 +127,3 @@ struct LockScreenReminderWidget: View {
         return components.joined(separator: ", ")
     }
 }
-
