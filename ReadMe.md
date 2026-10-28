@@ -71,14 +71,43 @@ Atoll turns the MacBook notch into a focused command surface for media, system i
 
 ## Installation
 1) Download the latest DMG [here](https://github.com/Octoberlobster/Atoll/releases/latest).
-2) Open the DMG and double-click **Install Atoll.command**.
-3) Enter your macOS password when requested.
-4) Launch Atoll and grant the requested permissions.
+2) Open the DMG.
+3) Double-click **Install Atoll.command** inside the DMG. Do not double-click
+   `Atoll.app` directly.
+4) Enter your macOS password when requested.
+5) Launch Atoll and grant the requested permissions.
 
-The personal-use builds are ad-hoc signed rather than notarized with an Apple
-Developer ID. macOS may therefore block a direct double-click on `Atoll.app`
-downloaded from Chrome. Use `Install Atoll.command` inside the DMG; it removes
-the download quarantine only after copying the app to `/Applications`.
+### Gatekeeper notice for personal builds
+
+The personal-use builds are ad-hoc signed. They are not signed with an Apple
+Developer ID or notarized by Apple, so macOS can show either of these messages
+when `Atoll.app` is opened directly from a browser download:
+
+- “Atoll is damaged and can’t be opened.”
+- “Apple could not verify Atoll is free of malware.”
+
+These messages do not mean that the DMG is corrupted. They mean that Gatekeeper
+cannot verify the developer identity. The supported installation method for
+this personal-use build is **Install Atoll.command**, which copies the app to
+`/Applications` and removes the browser quarantine after the copy succeeds.
+
+If macOS also blocks the command file, open **Terminal** and run:
+
+```bash
+cd ~/Downloads
+xattr -dr com.apple.quarantine "Atoll-<version>.dmg"
+```
+
+Open the DMG again and double-click **Install Atoll.command**. Alternatively,
+install directly from the repository with:
+
+```bash
+cd /path/to/Atoll
+./scripts/install_atoll.sh ~/Downloads/Atoll-<version>.dmg
+```
+
+The installer removes the downloaded DMG after `/Applications/Atoll.app` has
+been verified. Use `--keep-dmg` if you want to retain it.
 
 ## Build Locally
 
