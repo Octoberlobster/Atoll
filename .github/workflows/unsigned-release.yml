@@ -63,11 +63,14 @@ jobs:
             -configuration Release \
             -derivedDataPath build/DerivedData \
             CODE_SIGN_IDENTITY="-" \
-            CODE_SIGNING_REQUIRED=NO \
-            CODE_SIGNING_ALLOWED=NO \
+            CODE_SIGNING_REQUIRED=YES \
+            CODE_SIGNING_ALLOWED=YES \
             build
 
           test -d "build/DerivedData/Build/Products/Release/${APP_NAME}.app"
+
+          codesign --verify --deep --strict --verbose=2 \
+            "build/DerivedData/Build/Products/Release/${APP_NAME}.app"
 
       - name: Create unsigned DMG
         id: package
@@ -89,6 +92,8 @@ jobs:
             -ov \
             -format UDZO \
             "build/${DMG_NAME}"
+
+          hdiutil verify "build/${DMG_NAME}"
 
           echo "version=$VERSION" >> "$GITHUB_OUTPUT"
           echo "dmg_name=$DMG_NAME" >> "$GITHUB_OUTPUT"
