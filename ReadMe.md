@@ -71,8 +71,14 @@ Atoll turns the MacBook notch into a focused command surface for media, system i
 
 ## Installation
 1) Download the latest DMG [here](https://github.com/Octoberlobster/Atoll/releases/latest).
-2) Open the DMG and drag Atoll into Applications.
-3) Launch Atoll and grant the requested permissions.
+2) Open the DMG and double-click **Install Atoll.command**.
+3) Enter your macOS password when requested.
+4) Launch Atoll and grant the requested permissions.
+
+The personal-use builds are ad-hoc signed rather than notarized with an Apple
+Developer ID. macOS may therefore block a direct double-click on `Atoll.app`
+downloaded from Chrome. Use `Install Atoll.command` inside the DMG; it removes
+the download quarantine only after copying the app to `/Applications`.
 
 ## Build Locally
 
