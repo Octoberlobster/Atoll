@@ -69,6 +69,8 @@ jobs:
 
           test -d "build/DerivedData/Build/Products/Release/${APP_NAME}.app"
 
+          codesign --force --deep --sign - --timestamp=none \
+            "build/DerivedData/Build/Products/Release/${APP_NAME}.app"
           codesign --verify --deep --strict --verbose=2 \
             "build/DerivedData/Build/Products/Release/${APP_NAME}.app"
 
