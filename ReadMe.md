@@ -12,8 +12,8 @@
   <a href="https://github.com/Ebullioscopic/Atoll/network/members">
     <img src="https://img.shields.io/github/forks/Ebullioscopic/Atoll?style=social" alt="GitHub forks"/>
   </a>
-  <a href="https://github.com/Ebullioscopic/Atoll/releases">
-    <img src="https://img.shields.io/github/downloads/Ebullioscopic/Atoll/total?label=Downloads" alt="GitHub downloads"/>
+  <a href="https://github.com/Octoberlobster/Atoll/releases">
+    <img src="https://img.shields.io/github/downloads/Octoberlobster/Atoll/total?label=Downloads" alt="GitHub downloads"/>
   </a>
   <a href="https://discord.gg/PaqFkRTDF8">
     <img src="https://dcbadge.limes.pink/api/server/https://discord.gg/PaqFkRTDF8?style=flat" alt="Discord server"/>
@@ -24,7 +24,7 @@
   <a href="https://github.com/sponsors/Ebullioscopic">
     <img src="https://img.shields.io/badge/Sponsor-Ebullioscopic-ff69b4?style=for-the-badge&logo=github" alt="Sponsor Ebullioscopic"/>
   </a>
-  <a href="https://github.com/Ebullioscopic/Atoll/releases/latest">
+  <a href="https://github.com/Octoberlobster/Atoll/releases/latest">
     <img src="https://img.shields.io/badge/Download-Atoll%20for%20macOS-0A84FF?style=for-the-badge&logo=apple" alt="Download Atoll for macOS"/>
   </a>
   <a href="https://www.buymeacoffee.com/kryoscopic">
@@ -70,7 +70,7 @@ Atoll turns the MacBook notch into a focused command surface for media, system i
 - Permissions as needed: Accessibility, Camera, Calendar, Screen Recording, Music.
 
 ## Installation
-1) Download the latest DMG [here](https://github.com/Ebullioscopic/Atoll/releases/latest).
+1) Download the latest DMG [here](https://github.com/Octoberlobster/Atoll/releases/latest).
 2) Open the DMG and drag Atoll into Applications.
 3) Launch Atoll and grant the requested permissions.
 
@@ -150,11 +150,31 @@ sudo xattr -dr com.apple.quarantine "/Applications/Atoll.app"
 open -a Atoll
 ```
 
+To install a downloaded DMG and remove the DMG and temporary mounted files automatically,
+run the repository's installer. The source DMG is deleted only after
+`/Applications/Atoll.app` has been verified:
+
+```bash
+./scripts/install_atoll.sh "/path/to/Atoll-<version>.dmg"
+```
+
+For a locally built app, install it and remove the generated DerivedData after
+the copy succeeds:
+
+```bash
+./scripts/install_atoll.sh \
+  --clean-build \
+  "build/DerivedData/Build/Products/Release/Atoll.app"
+```
+
+The script keeps the repository and `/Applications/Atoll.app`. Use
+`--keep-dmg` when the downloaded DMG must be retained.
+
 Unsigned local builds are intended for personal use. A Developer ID certificate and Apple notarization are required for distributing an app that installs without Gatekeeper warnings on other Macs.
 
 ### Download an Automated Unsigned Build
 
-Every push to the `dev` branch runs the **Unsigned Release** GitHub Actions workflow. When it succeeds, open the repository's [Releases page](https://github.com/Ebullioscopic/Atoll/releases) and download the newest prerelease DMG. You can also run the workflow manually from the **Actions** tab.
+Every push to the `dev` branch runs the **Unsigned Release** GitHub Actions workflow. When it succeeds, open the repository's [Releases page](https://github.com/Octoberlobster/Atoll/releases) and download the newest prerelease DMG. You can also run the workflow manually from the **Actions** tab.
 
 These builds do not require an Apple Developer Program membership, but macOS may show a Gatekeeper warning the first time the app is opened.
 
